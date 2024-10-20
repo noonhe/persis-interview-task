@@ -1,0 +1,33 @@
+/* phone-input.component.scss */
+.phone-input-container {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    
+    mat-form-field {
+      flex: 1;
+      
+      &:first-child {
+        min-width: 200px;
+      }
+    }
+  }
+  
+  .country-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    .flag {
+      font-size: 1.2rem;
+    }
+    
+    .country-name {
+      flex: 1;
+    }
+    
+    .dial-code {
+      color: rgba(0, 0, 0, 0.6);
+      font-size: 0.9rem;
+    }
+  }

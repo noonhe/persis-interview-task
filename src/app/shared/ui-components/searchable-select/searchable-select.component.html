@@ -1,0 +1,37 @@
+<mat-form-field appearance="outline" class="w-full">
+    <mat-label *ngIf="label">{{ label }}</mat-label>
+    <mat-select 
+      [formControl]="selectControl" 
+      (selectionChange)="onSelectionChange($event)"
+      #select>
+      <mat-select-trigger>
+        <ng-container *ngTemplateOutlet="triggerTemplate || defaultTriggerTemplate; context: { $implicit: selectControl.value }">
+        </ng-container>
+      </mat-select-trigger>
+      
+      <div class="search-box">
+        <mat-form-field class="w-full">
+          <input matInput
+                 type="text"
+                 [formControl]="searchControl"
+                 placeholder="Search"
+                 (keydown)="$event.stopPropagation()"
+                 #search>
+        </mat-form-field>
+      </div>
+
+      <mat-option *ngFor="let option of filteredOptions" [value]="option">
+        <ng-container *ngTemplateOutlet="optionTemplate || defaultOptionTemplate; context: { $implicit: option }">
+        </ng-container>
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+      <!-- Default templates -->
+      <ng-template #defaultTriggerTemplate let-value>
+        {{ value?.name || '' }}
+      </ng-template>
+  
+      <ng-template #defaultOptionTemplate let-option>
+        {{ option.name }}
+      </ng-template>

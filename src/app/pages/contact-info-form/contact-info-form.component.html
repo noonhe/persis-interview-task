@@ -1,0 +1,35 @@
+<div class="container">  
+    <mat-card>
+      <mat-card-title>
+        <h2>
+            Contact Info Form
+        </h2>
+    </mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="contactForm" (ngSubmit)="onSave()">
+            <!-- <mat-form-field>
+              <input matInput placeholder="Name" formControlName="name">
+              <mat-error *ngIf="contactForm.get('name').hasError('required')">
+                Name is required
+              </mat-error>
+            </mat-form-field> -->
+            <international-phone-number formControlName="phoneNumber"></international-phone-number>
+            <!-- <mat-form-field>
+                <input matInput placeholder="description" formControlName="message">
+            </mat-form-field> -->
+            <!-- <searchable-select label="countries" [options]="countries"></searchable-select> -->
+          </form>
+
+          <div class="actions">
+            <button mat-button (click)="onSave()">save</button>
+            <button mat-button (click)="onReset()">reset</button>
+          </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+
+
+
+

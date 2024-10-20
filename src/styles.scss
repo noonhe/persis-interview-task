@@ -1,1 +1,20 @@
-/* You can add global styles to this file, and also import other style files */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+mat-card{
+  gap: 1rem;
+  padding: 1rem;
+}
