@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ContentChild, Input, OnChanges, OnInit, SimpleChanges, TemplateRef, forwardRef } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -29,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select';
 })
 export class SearchableSelectComponent implements  OnInit, OnChanges, ControlValueAccessor {
   @Input() label:string;
+  @Input() placeholder:string;
   @Input() options: any[];
   @ContentChild('triggerTemplate') triggerTemplate!: TemplateRef<any>;
   @ContentChild('optionTemplate') optionTemplate!: TemplateRef<any>;
@@ -41,10 +41,10 @@ export class SearchableSelectComponent implements  OnInit, OnChanges, ControlVal
   private value: any;
   disabled = false;
 
-  constructor(){}
+  constructor(
+  ){}
 
   ngOnInit(): void {
-    console.log(this.options)
     this.searchControl.valueChanges.pipe(
       map(value => {
 
@@ -61,6 +61,9 @@ export class SearchableSelectComponent implements  OnInit, OnChanges, ControlVal
   ngOnChanges(changes: SimpleChanges): void {
     if(this.options){
       this.filteredOptions = [...this.options]
+      if(this.filteredOptions.length){
+        this.selectControl.setValue(this.options[0]);
+      }
     }
   }
 

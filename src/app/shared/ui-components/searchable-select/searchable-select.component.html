@@ -3,6 +3,7 @@
     <mat-select 
       [formControl]="selectControl" 
       (selectionChange)="onSelectionChange($event)"
+      [placeholder]="placeholder"
       #select>
       <mat-select-trigger>
         <ng-container *ngTemplateOutlet="triggerTemplate || defaultTriggerTemplate; context: { $implicit: selectControl.value }">

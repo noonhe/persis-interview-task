@@ -1,40 +1,42 @@
 <form *ngIf="form" [formGroup]="form" class="phone-input-container">
-    <!-- <mat-form-field appearance="outline"> -->
-      <!-- <mat-label>Phone</mat-label> -->
-    <searchable-select formControlName="country" label="countries" [options]="countries">
+    <div class="country-box">
+        <span>Phone:</span>
+        <searchable-select formControlName="country" placeholder="Countries" [options]="countries">
+            <ng-template #triggerTemplate let-value>
+                <div>
+                    <span *ngIf="value" class="country-option">
+                        <span class="country-name">{{ value.name }}</span>
+                    </span>
+                </div>
+            </ng-template>
+        
+          
+            <ng-template #optionTemplate let-country>
+                <div>
+                    <span class="country-option">
+                        <span class="country-name">{{ country.name }}</span>
+                        <span class="dial-code">{{ country.dialCode }}</span>
+                    </span>
+                </div>
+            </ng-template>
+        </searchable-select>
+    </div>
 
-        <ng-template #triggerTemplate let-value>
-            <div>
-                <span *ngIf="value" class="country-option">
-                    <span class="country-name">{{ value.name }}</span>
-                </span>
-            </div>
-        </ng-template>
-    
-      
-        <ng-template #optionTemplate let-country>
-            <div>
-                <span class="country-option">
-                    <span class="country-name">{{ country.name }}</span>
-                    <span class="dial-code">{{ country.dialCode }}</span>
-                </span>
-            </div>
-        </ng-template>
-    </searchable-select>
-    <!-- </mat-form-field> -->
-    <mat-form-field appearance="outline">
-      <mat-label>Phone Number</mat-label>
-      <input matInput
-             formControlName="phone"
-             [placeholder]="selectedCountry?.mask || 'Enter phone number'"
-             [mask]="selectedCountry?.mask || ''"
-             [validation]="true"
-             [pattern]="selectedCountry?.pattern "
-             >
-      <mat-hint *ngIf="selectedCountry">
-        Format: {{ selectedCountry.pattern }} 
-        ({{ selectedCountry.minLength }} - {{ selectedCountry.maxLength }} digits)
-      </mat-hint>
-      <mat-error>{{ getErrorMessage('phoneNumber') }}</mat-error>
-    </mat-form-field>
+    <div class="phone-box">
+        <span>Mobile:</span>
+        <mat-form-field appearance="outline">
+            <input matInput
+                inputmode="tel"
+                formControlName="phone"
+                [placeholder]="selectedCountry?.mask || 'Enter phone number'"
+                [mask]="selectedCountry?.mask || ''"
+                [validation]="true"
+                [pattern]="selectedCountry?.pattern "
+                >
+            <span matTextPrefix *ngIf="selectedCountry">{{selectedCountry.code}}</span>
+            <mat-error>{{ getErrorMessage('phoneNumber') }}</mat-error>
+          </mat-form-field>
+    </div>
+
+
   </form>

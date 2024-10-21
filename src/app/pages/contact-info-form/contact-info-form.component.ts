@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -34,9 +34,9 @@ import { Observable, tap } from 'rxjs';
 export class ContactInfoFormComponent implements OnInit {
 
   contactForm: FormGroup = new FormGroup({
-    // name: new FormControl(),
-    phoneNumber: new FormControl(),
-    // message: new FormControl(),
+    name: new FormControl(null , [Validators.required]),
+    phoneNumber: new FormControl(null , [Validators.required]),
+    message: new FormControl(null , [Validators.required]),
   })
 
 
@@ -48,15 +48,6 @@ export class ContactInfoFormComponent implements OnInit {
   countries: Country[] = [];
 
   ngOnInit(): void {
-    // this.countryService.getCountries().subscribe(
-    //   {
-    //     next: (value: Country[]) => {
-    //       console.log(value)
-    //       this.countries = [...value];
-    //     }
-    //   }
-    // );
-    
   }
 
   onSave(){

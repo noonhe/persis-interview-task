@@ -1,14 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, forwardRef, OnDestroy, OnInit } from '@angular/core';
-import { ControlValueAccessor, FormControl, FormGroup, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { Component, forwardRef, Injector, OnDestroy, OnInit, Optional, Self } from '@angular/core';
+import { ControlValueAccessor, FormControl, FormGroup, FormsModule, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import {  MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 import { Country } from '../../models/models';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import {  Subject, takeUntil } from 'rxjs';
 import { NgxMaskDirective, provideNgxMask} from 'ngx-mask';
 import { CountryService } from '../../services/country.service';
+import { PhoneNumberValidators } from '../../validators/phone-number.validator';
+
 @Component({
   selector: 'international-phone-number',
   standalone: true,
@@ -33,7 +35,7 @@ import { CountryService } from '../../services/country.service';
     }
   ]
 })
-export class InternationalPhoneNumberComponent  implements ControlValueAccessor, OnInit, OnDestroy {
+export class InternationalPhoneNumberComponent  implements  ControlValueAccessor, OnInit, OnDestroy {
 
   form: FormGroup = new FormGroup({
     country: new FormControl('', [Validators.required]),
@@ -43,12 +45,11 @@ export class InternationalPhoneNumberComponent  implements ControlValueAccessor,
   selectedCountry: Country | null = null;
   disabled = false;
   private destroy$ = new Subject<void>();
-
   constructor(
-    private countryService: CountryService
+    private countryService: CountryService,
   ) {
-  }
 
+  }
   countries: Country[] = [];
 
   ngOnInit() {
@@ -59,22 +60,23 @@ export class InternationalPhoneNumberComponent  implements ControlValueAccessor,
         }
       }
     );
-    // Update phone validators when country changes
+
+
     this.form.get('country')?.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe((country: Country) => {
         this.selectedCountry = country;
-        
-        // Update phone number validators
+        this.form.get('phone').setValue(null);
+       
         this.form.get('phone')?.setValidators([
           Validators.required,
-          // PhoneNumberValidators.createPhoneValidator(() => this.selectedCountry)
+          PhoneNumberValidators.createPhoneValidator(this.selectedCountry)
         ]);
         
         this.form.get('phone')?.updateValueAndValidity();
       });
 
-    // Handle two-way binding
+    
     this.form.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(value => {
@@ -83,6 +85,12 @@ export class InternationalPhoneNumberComponent  implements ControlValueAccessor,
           this.onChange(phoneValue);
         }
       });
+  }
+
+  reset() {
+    this.form.get('phone').reset()
+    this.onChange(null);
+    this.onTouch();
   }
 
   ngOnDestroy() {
@@ -94,6 +102,7 @@ export class InternationalPhoneNumberComponent  implements ControlValueAccessor,
   private onTouch: any = () => {};
 
   writeValue(value: any): void {
+    console.log(value)
     if (value) {
       const country = value.country;
       if (country) {
@@ -102,6 +111,8 @@ export class InternationalPhoneNumberComponent  implements ControlValueAccessor,
           phoneNumber: value.number
         }, { emitEvent: false });
       }
+    }else{
+      this.reset();
     }
   }
 
@@ -121,6 +132,7 @@ export class InternationalPhoneNumberComponent  implements ControlValueAccessor,
       this.form.enable();
     }
   }
+
   formatPhoneNumber() {
     if (!this.selectedCountry) return;
 
@@ -143,11 +155,6 @@ export class InternationalPhoneNumberComponent  implements ControlValueAccessor,
       phoneNumber: formatted.trim()
     }, { emitEvent: false });
   }
-
-  trackByCountryCode(index: number, country: Country): string {
-    return country.code;
-  }
-
  
   getErrorMessage(controlName: string): string {
     const control = this.form.get(controlName);
@@ -155,10 +162,6 @@ export class InternationalPhoneNumberComponent  implements ControlValueAccessor,
 
     if (control.hasError('required')) {
       return `${controlName === 'country' ? 'Country' : 'Phone number'} is required`;
-    }
-
-    if (control.hasError('invalidCountry')) {
-      return 'Invalid country selected';
     }
 
     if (control.hasError('minLength')) {

@@ -7,26 +7,38 @@
     </mat-card-title>
       <mat-card-content>
         <form [formGroup]="contactForm" (ngSubmit)="onSave()">
-            <!-- <mat-form-field>
+            <mat-form-field appearance="outline">
               <input matInput placeholder="Name" formControlName="name">
               <mat-error *ngIf="contactForm.get('name').hasError('required')">
                 Name is required
               </mat-error>
-            </mat-form-field> -->
+            </mat-form-field>
             <international-phone-number formControlName="phoneNumber"></international-phone-number>
-            <!-- <mat-form-field>
-                <input matInput placeholder="description" formControlName="message">
-            </mat-form-field> -->
-            <!-- <searchable-select label="countries" [options]="countries"></searchable-select> -->
+            <mat-form-field appearance="outline">
+                <textarea matInput placeholder="Message" formControlName="message"></textarea>
+            </mat-form-field> 
           </form>
 
           <div class="actions">
-            <button mat-button (click)="onSave()">save</button>
-            <button mat-button (click)="onReset()">reset</button>
+            <button mat-flat-button [disabled]="contactForm.invalid" (click)="onSave()">save</button>
+            <button mat-flat-button (click)="onReset()">reset</button>
           </div>
 
       </mat-card-content>
     </mat-card>
+
+    <mat-card *ngIf="contactForm.controls['phoneNumber'].value && contactForm.controls['phoneNumber'].valid">
+      <mat-card-title>
+        <h2>
+            PhoneNumber
+        </h2>
+    </mat-card-title>
+      <mat-card-content>
+        <span>{{contactForm.controls['phoneNumber'].value}}</span>
+
+      </mat-card-content>
+    </mat-card>
+
   </div>
 
 
