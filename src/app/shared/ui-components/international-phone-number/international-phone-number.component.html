@@ -34,9 +34,7 @@
                 [pattern]="selectedCountry?.pattern "
                 >
             <span matTextPrefix *ngIf="selectedCountry">{{selectedCountry.code}}</span>
-            <mat-error>{{ getErrorMessage('phoneNumber') }}</mat-error>
+            <mat-error>{{ getErrorMessage('phone') }}</mat-error>
           </mat-form-field>
     </div>
-
-
   </form>
